@@ -1,0 +1,1 @@
+# plugins-fixed-and-sticky-header
