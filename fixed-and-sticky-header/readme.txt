@@ -1,61 +1,125 @@
-===  Fixed And Sticky Header ===
+=== Fixed And Sticky Header ===
 Contributors: arjunthakur
-Tags: fixed header, sticky header, fixed menu, sticky menu, fixed, sticky, menu, header fixed, header sticky, sticky header plugin, fixed header plugin, sticky menu, myStickymenu.
+Tags: sticky header, fixed header, sticky menu, fixed menu, sticky navigation, fixed navigation, sticky navbar, fixed navbar, header on scroll, wordpress header
 Requires at least: 3.5
-Tested up to: 5.7
-Requires PHP: 5.2.4
-Stable tag: 1.5
-Version: 1.5
+Tested up to: 7.1
+Requires PHP: 5.6
+Stable tag: 1.5.1
 License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-This plugin will made your header or menu fixed and sticky.
+Make your WordPress website header fixed and sticky while visitors scroll. Choose your header, scroll position, colors, height, and spacing.
 
 == Description ==
 
- Fixed and Sticky header wordpress plugin makes your header or menu visible at all times.
- It's a great feature that allows people to browse faster and easy to use.
- 
- In setting option(Fixed header) on dashboard, you can add fixed header background color as well as your fixed and sticky header text color so it provides enough contrast with regards to the background color.
+Keep your website header visible while visitors scroll.
 
-= Fixed and Sticky header options. =
+Fixed And Sticky Header lets you make your existing WordPress website header fixed and sticky without replacing your theme's header.
 
-* **Add Fixed Header (Class or Id)**
-* **Add Background Color**
-* **Add Text Color**
-* **Fixed Header Scroll**
+Choose the header you want to make sticky, set when it should become fixed while scrolling, and adjust its appearance to match your website.
 
-= Major features of this plugin include =
+The plugin is simple to configure and works with your existing WordPress theme.
 
- 1. Fixed the header after adding class or id in plugin setting.
- 2. Add background color for fixed header.
- 3. Add text color.
- 4. Fixed header on given scroll
+== Key Features ==
 
-= Like the plugin? =
-<a href="https://wordpress.org/support/plugin/fixed-and-sticky-header/reviews/?rate=5#new-post">Please Vote</a>, Your votes really make a difference! Thanks.
+* Fixed and sticky header - Keep your header visible as visitors scroll.
+* Choose your header - Select the header element you want to make fixed or sticky.
+* Scroll control - Choose how far visitors scroll before the header becomes fixed.
+* Background color - Set the background color of your sticky header.
+* Text color - Set the text color of your sticky header.
+* Header height - Set the height of the fixed header.
+* Header spacing - Adjust the padding around your header.
+* Works with existing themes - Uses your website's existing header rather than creating a replacement header.
+* Simple setup - Configure the plugin from your WordPress admin area.
 
 == Installation ==
 
-1. Upload the `fixed-and-sticky-header` folder to the directory `/wp-content/plugins/`.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
-3. Goto fixed header option in setting on dashboard, now add your header's "class" or "id" and save your settings.
+1. Install and activate the Fixed And Sticky Header plugin.
+2. Go to Settings -> Fixed And Sticky Header.
+3. Enter the CSS selector for the header you want to make fixed or sticky.
+4. Set the scroll distance and customize the header appearance.
+5. Click Save Changes.
+6. Visit your website and scroll to check the sticky header.
 
-== Frequently asked questions ==
+== Finding Your Header ==
 
-= How to install plugin? =
+The plugin needs to know which part of your website should become fixed.
 
-The plugin is simple to install:
+Your theme may use a selector such as:
 
-1. Upload the `fixed-and-sticky-header` folder to the directory `/wp-content/plugins/`.
-2. Activate the plugin through the 'Plugins' menu in WordPress.
+* `.site-header`
+* `#masthead`
+* `.main-header`
 
-= What is the benefit of using this plugin? =
+If you are unsure which selector to use, inspect your website's header using your browser's developer tools and identify the main header container.
 
-Another Benefit of this simple plugin is that increases usability and page views of your WordPress site.
+Tip: Select the main header or header container rather than only the logo, menu, or an individual element inside the header.
 
-== Screenshots ==
+The exact selector depends on your WordPress theme.
 
-1. screenshot1.png
-2. screenshot2.png
-3. screenshot3.png
+== Frequently Asked Questions ==
+
+= How do I make my header sticky? =
+
+Go to Settings -> Fixed And Sticky Header, enter your header's CSS selector, choose the scroll position, and save your settings.
+
+= Why isn't my header becoming sticky? =
+
+First, check that the header selector is correct. Make sure you have selected the main header or header container rather than an individual element such as the logo or menu.
+
+If the changes are not immediately visible, clear your site's cache and browser cache.
+
+= Why did my logo or menu position change? =
+
+The plugin applies the fixed/sticky behavior to the header element you select. If the selected element is too broad or is not the correct header container, it can affect the layout of elements inside it.
+
+Try selecting the main header container used by your theme.
+
+= Can I change the sticky header's background and text colors? =
+
+Yes. You can change the background color and text color from the plugin settings.
+
+= Can I change the header height and spacing? =
+
+Yes. The plugin provides settings for header height and padding.
+
+= Can I use the plugin with my existing theme? =
+
+Yes. The plugin works with your existing theme's header. You select the header element you want the plugin to make fixed or sticky.
+
+= Can I choose when the header becomes fixed? =
+
+Yes. You can set the scroll distance at which the header becomes fixed.
+
+= Does the plugin replace my website header? =
+
+No. The plugin applies fixed/sticky behavior to the existing header element selected in the settings.
+
+= Will my settings be preserved when I update the plugin? =
+
+Yes. Version 1.5.1 preserves your existing plugin settings when upgrading from an earlier version.
+
+= Does the plugin work on mobile devices? =
+
+The plugin applies the fixed/sticky behavior according to your settings. The current version does not provide a separate option to disable the sticky header on mobile devices.
+
+== Upgrade Notice ==
+
+= 1.5.1 =
+This update includes security and compatibility fixes, fixes a header alignment issue, improves settings handling, and preserves existing settings when updating or reactivating the plugin.
+
+== Changelog ==
+
+= 1.5.1 =
+* Security and compatibility patch.
+* Sanitized and validated plugin settings before saving.
+* Escaped settings output and safely encoded JavaScript configuration.
+* Preserved existing settings during deactivation, reactivation, and upgrades.
+* Prevented activation from overwriting existing plugin configuration.
+* Removed an unintended forced text alignment that could move header logos.
+* Added validation for CSS selectors, CSS values, and colors.
+* Replaced the JavaScript-based admin redirect with a WordPress-safe redirect.
+* Updated WordPress and PHP compatibility metadata.
+
+= 1.5 =
+* Previous stable release.
