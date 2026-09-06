@@ -2,24 +2,24 @@
 /*
 Plugin Name: Fixed And Sticky Header
 Plugin URI: https://arjunthakur2.wordpress.com
-Description: Make your website header fixed or sticky while scrolling.
+Description: This plugin will made your header sticky or fixed
 Author: Arjun Thakur
 Author URI: https://profiles.wordpress.org/arjunthakur
-Version: 1.5.1
+Version: 1.5.3
 License: GPLv2 or later
 Text Domain: fixed-and-sticky-header
 */
 if ( ! defined( 'ABSPATH' ) ) exit;
 if(!class_exists('fixedORsticky_class')):
 
-function fsh_sanitize_selector( $value ) {
+function fixed_and_sticky_header_sanitize_selector( $value ) {
     $value = trim( wp_unslash( $value ) );
     if ( '' === $value || strlen( $value ) > 200 ) return '';
     if ( preg_match( '/[\x00-\x1F\x7F<>"\'{};\\\\]/', $value ) ) return '';
     return sanitize_text_field( $value );
 }
 
-function fsh_sanitize_color( $value ) {
+function fixed_and_sticky_header_sanitize_color( $value ) {
     $value = trim( wp_unslash( $value ) );
     if ( '' === $value || strlen( $value ) > 100 ) return '';
     if ( preg_match( '/[\x00-\x1F\x7F<>"\'{};\\\\]/', $value ) ) return '';
@@ -27,7 +27,7 @@ function fsh_sanitize_color( $value ) {
     return sanitize_text_field( $value );
 }
 
-function fsh_sanitize_css_length( $value ) {
+function fixed_and_sticky_header_sanitize_css_length( $value ) {
     $value = trim( wp_unslash( $value ) );
     if ( '' === $value || strlen( $value ) > 100 ) return '';
     if ( preg_match( '/[\x00-\x1F\x7F<>"\'{};\\\\]/', $value ) ) return '';
@@ -42,6 +42,7 @@ class fixedORsticky_class
    register_activation_hook(__FILE__, array(&$this, 'fixedORsticky_Activation'));
    add_action('admin_menu',array(&$this, 'optionsPage_fixed'));
    add_action('admin_init',array(&$this, 'handle_settings_save'));
+   add_action('wp_enqueue_scripts',array(&$this, 'enqueue_scripts'));
    add_action('wp_head', array(&$this, 'fixedmyscriptfx'));
    add_action('wp_head', array(&$this, 'myPlugincss'));
    }
@@ -90,25 +91,37 @@ class fixedORsticky_class
 
    check_admin_referer( 'FixedorstickyAction', 'nonceAmountoftime' );
 
-   $myplugins_options = get_option( 'pluginoptions_fx', array() );
-   if ( ! is_array( $myplugins_options ) ) {
-    $myplugins_options = array();
+   $fsh_options = get_option( 'pluginoptions_fx', array() );
+   if ( ! is_array( $fsh_options ) ) {
+    $fsh_options = array();
    }
 
+   $fsh_selector = isset( $_POST['class-addfixed-fx'] ) ? sanitize_text_field( wp_unslash( $_POST['class-addfixed-fx'] ) ) : '';
+   $fsh_background_color = isset( $_POST['class-addbackgroundcolor-fx'] ) ? sanitize_text_field( wp_unslash( $_POST['class-addbackgroundcolor-fx'] ) ) : '';
+   $fsh_text_color = isset( $_POST['class-textcolor-fx'] ) ? sanitize_text_field( wp_unslash( $_POST['class-textcolor-fx'] ) ) : '';
+   $fsh_height = isset( $_POST['fixed-header-height-fx'] ) ? sanitize_text_field( wp_unslash( $_POST['fixed-header-height-fx'] ) ) : '';
+   $fsh_padding = isset( $_POST['fixed-header-padding-fx'] ) ? sanitize_text_field( wp_unslash( $_POST['fixed-header-padding-fx'] ) ) : '';
+   $fsh_scroll = isset( $_POST['fixed-scroll-fx'] ) ? absint( sanitize_text_field( wp_unslash( $_POST['fixed-scroll-fx'] ) ) ) : 0;
+
    $fixedorstickyheader = array_merge(
-    $myplugins_options,
+    $fsh_options,
     array(
-     'class-addfixed-fx'           => isset( $_POST['class-addfixed-fx'] ) ? fsh_sanitize_selector( $_POST['class-addfixed-fx'] ) : '',
-     'class-addbackgroundcolor-fx' => isset( $_POST['class-addbackgroundcolor-fx'] ) ? fsh_sanitize_color( $_POST['class-addbackgroundcolor-fx'] ) : '',
-     'class-textcolor-fx'          => isset( $_POST['class-textcolor-fx'] ) ? fsh_sanitize_color( $_POST['class-textcolor-fx'] ) : '',
-     'fixed-header-height-fx'      => isset( $_POST['fixed-header-height-fx'] ) ? fsh_sanitize_css_length( $_POST['fixed-header-height-fx'] ) : '',
-     'fixed-header-padding-fx'     => isset( $_POST['fixed-header-padding-fx'] ) ? fsh_sanitize_css_length( $_POST['fixed-header-padding-fx'] ) : '',
-     'fixed-scroll-fx'             => isset( $_POST['fixed-scroll-fx'] ) ? absint( wp_unslash( $_POST['fixed-scroll-fx'] ) ) : 0,
+     'class-addfixed-fx'           => fixed_and_sticky_header_sanitize_selector( $fsh_selector ),
+     'class-addbackgroundcolor-fx' => fixed_and_sticky_header_sanitize_color( $fsh_background_color ),
+     'class-textcolor-fx'          => fixed_and_sticky_header_sanitize_color( $fsh_text_color ),
+     'fixed-header-height-fx'      => fixed_and_sticky_header_sanitize_css_length( $fsh_height ),
+     'fixed-header-padding-fx'     => fixed_and_sticky_header_sanitize_css_length( $fsh_padding ),
+     'fixed-scroll-fx'             => absint( $fsh_scroll ),
     )
    );
 
    update_option( 'pluginoptions_fx', $fixedorstickyheader );
-   myfixedurl( 'options-general.php?page=myplugin_setting&instruct=1' );
+   set_transient( 'fsh_settings_updated_' . get_current_user_id(), true, 60 );
+   fixed_and_sticky_header_safe_redirect( 'options-general.php?page=myplugin_setting' );
+  }
+
+  public function enqueue_scripts(){
+   wp_enqueue_script( 'jquery' );
   }
 
   /*Fixed Checking for userRole*/
@@ -118,14 +131,10 @@ class fixedORsticky_class
   }
 
   /*My Scripts*/
-  public function fixedmyscriptfx(){ $myplugins_options = get_option("pluginoptions_fx"); ?>
-  <script
-  src="https://code.jquery.com/jquery-3.6.0.min.js"
-  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
-  crossorigin="anonymous"></script>
+  public function fixedmyscriptfx(){ $fsh_options = get_option("pluginoptions_fx"); ?>
   <script type="text/javascript"> 
-      var fixed_header_class   = <?php echo wp_json_encode( isset( $myplugins_options["class-addfixed-fx"] ) ? $myplugins_options["class-addfixed-fx"] : '' ); ?>;
-      var fixed_header_scroll   = <?php echo wp_json_encode( isset( $myplugins_options["fixed-scroll-fx"] ) ? $myplugins_options["fixed-scroll-fx"] : 0 ); ?>;
+      var fixed_header_class   = <?php echo wp_json_encode( isset( $fsh_options["class-addfixed-fx"] ) ? $fsh_options["class-addfixed-fx"] : '' ); ?>;
+      var fixed_header_scroll   = <?php echo wp_json_encode( isset( $fsh_options["fixed-scroll-fx"] ) ? $fsh_options["fixed-scroll-fx"] : 0 ); ?>;
       jQuery(window).scroll(function(){           
         if(jQuery(document).scrollTop() > fixed_header_scroll){
              jQuery(fixed_header_class).addClass("myfixedHeader");
@@ -138,16 +147,16 @@ class fixedORsticky_class
   
   /*Plugin css*/
    public function myPlugincss() {
-    $myplugins_options = get_option("pluginoptions_fx");?><style type="text/css">
-    .myfixedHeader{background-color: <?php echo esc_attr( isset( $myplugins_options["class-addbackgroundcolor-fx"] ) ? $myplugins_options["class-addbackgroundcolor-fx"] : "" ); ?>!important;}
-    .myfixedHeader, .myfixedHeader a { color: <?php echo esc_attr( isset( $myplugins_options["class-textcolor-fx"] ) ? $myplugins_options["class-textcolor-fx"] : "" ); ?>!important;}
-	.myfixedHeader { height: <?php echo esc_attr( isset( $myplugins_options["fixed-header-height-fx"] ) ? $myplugins_options["fixed-header-height-fx"] : "" ); ?>;}
-	.myfixedHeader { padding: <?php echo esc_attr( isset( $myplugins_options["fixed-header-padding-fx"] ) ? $myplugins_options["fixed-header-padding-fx"] : "" ); ?>!important;}
+    $fsh_options = get_option("pluginoptions_fx");?><style type="text/css">
+    .myfixedHeader{background-color: <?php echo esc_attr( isset( $fsh_options["class-addbackgroundcolor-fx"] ) ? $fsh_options["class-addbackgroundcolor-fx"] : "" ); ?>!important;}
+    .myfixedHeader, .myfixedHeader a { color: <?php echo esc_attr( isset( $fsh_options["class-textcolor-fx"] ) ? $fsh_options["class-textcolor-fx"] : "" ); ?>!important;}
+	.myfixedHeader { height: <?php echo esc_attr( isset( $fsh_options["fixed-header-height-fx"] ) ? $fsh_options["fixed-header-height-fx"] : "" ); ?>;}
+	.myfixedHeader { padding: <?php echo esc_attr( isset( $fsh_options["fixed-header-padding-fx"] ) ? $fsh_options["fixed-header-padding-fx"] : "" ); ?>!important;}
     .myfixedHeader {margin: 0 auto !important; width:100% !important; position:fixed; z-index:99999; transition:all 0.7s ease; left:0; right:0; top:0;  }
-    <?php echo esc_attr( isset( $myplugins_options["class-addfixed-fx"] ) ? $myplugins_options["class-addfixed-fx"] : "" ); ?>{ transition:all 0.7s ease; }</style>	<?php }
+    <?php echo esc_attr( isset( $fsh_options["class-addfixed-fx"] ) ? $fsh_options["class-addfixed-fx"] : "" ); ?>{ transition:all 0.7s ease; }</style>	<?php }
    /*WP Url Redirect*/	
     }
-    function myfixedurl($url){
+    function fixed_and_sticky_header_safe_redirect($url){
         wp_safe_redirect( esc_url_raw( $url ) );
         exit;
     }

@@ -1,14 +1,15 @@
 === Fixed And Sticky Header ===
 Contributors: arjunthakur
-Tags: sticky header, fixed header, sticky menu, fixed menu, sticky navigation, fixed navigation, sticky navbar, fixed navbar, header on scroll, wordpress header
-Requires at least: 3.5
+Tags: sticky header, fixed header, sticky menu, fixed menu, sticky navigation
+Requires at least: 4.1
 Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.5.1
+Stable tag: 1.5.3
+Version: 1.5.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Make your WordPress website header fixed and sticky while visitors scroll. Choose your header, scroll position, colors, height, and spacing.
+Make your WordPress website header fixed or sticky while scrolling. Choose your header, scroll position, colors, height, and spacing.
 
 == Description ==
 
@@ -25,12 +26,8 @@ The plugin is simple to configure and works with your existing WordPress theme.
 * Fixed and sticky header - Keep your header visible as visitors scroll.
 * Choose your header - Select the header element you want to make fixed or sticky.
 * Scroll control - Choose how far visitors scroll before the header becomes fixed.
-* Background color - Set the background color of your sticky header.
-* Text color - Set the text color of your sticky header.
-* Header height - Set the height of the fixed header.
-* Header spacing - Adjust the padding around your header.
-* Works with existing themes - Uses your website's existing header rather than creating a replacement header.
-* Simple setup - Configure the plugin from your WordPress admin area.
+* Background and text colors - Set the colors of your sticky header.
+* Header height and spacing - Adjust the height and padding around your header.
 
 == Installation ==
 
@@ -97,7 +94,7 @@ No. The plugin applies fixed/sticky behavior to the existing header element sele
 
 = Will my settings be preserved when I update the plugin? =
 
-Yes. Version 1.5.1 preserves your existing plugin settings when upgrading from an earlier version.
+Yes. Version 1.5.2 preserves your existing plugin settings when upgrading from an earlier version.
 
 = Does the plugin work on mobile devices? =
 
@@ -105,10 +102,22 @@ The plugin applies the fixed/sticky behavior according to your settings. The cur
 
 == Upgrade Notice ==
 
-= 1.5.1 =
-This update includes security and compatibility fixes, fixes a header alignment issue, improves settings handling, and preserves existing settings when updating or reactivating the plugin.
+= 1.5.3 =
+This update improves settings handling, compatibility, and code security. It also removes the use of an externally hosted script and updates the plugin's compatibility information.
 
 == Changelog ==
+
+= 1.5.3 =
+* Refreshed the plugin icon and banner for improved visibility and presentation.
+* Minor design and documentation improvements.
+
+= 1.5.2 =
+* Improved settings input validation and nonce handling.
+* Corrected the plugin text domain and translated output handling.
+* Removed the externally hosted jQuery script and use WordPress's bundled jQuery instead.
+* Fixed non-prefixed global function and variable names.
+* Updated the minimum supported WordPress version to 4.1 to match the WordPress APIs used by the plugin.
+* Limited plugin directory tags to five relevant search terms.
 
 = 1.5.1 =
 * Security and compatibility patch.
@@ -122,4 +131,4 @@ This update includes security and compatibility fixes, fixes a header alignment 
 * Updated WordPress and PHP compatibility metadata.
 
 = 1.5 =
-* Previous stable release.
+* Previous release.
